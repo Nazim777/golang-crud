@@ -1,11 +1,9 @@
 package models
 
-import "gorm.io/gorm"
+import "time"
 
 type Todo struct {
-	gorm.Model
-	Title          string `json:"title"`
-	Description    string `json:"desc"` 
+	Title       string    `json:"title,omitempty" bson:"title,omitempty"`
+	Description string    `json:"description,omitempty" bson:"description,omitempty"`
+	CreatedAt   time.Time `json:"created_at,omitempty" bson:"created_at,omitempty"`
 }
-
-

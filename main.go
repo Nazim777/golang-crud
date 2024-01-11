@@ -5,10 +5,8 @@ import (
 	"user-api/routes"
 )
 
-
-
 func main() {
-	
+
 	database.ConnectDatabase()
 	routes.InitilizeRouter()
 }

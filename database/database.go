@@ -1,20 +1,27 @@
 package database
-import(
+
+import (
+	"context"
 	"log"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-	"user-api/models"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Db *gorm.DB
+var Collection *mongo.Collection
 func ConnectDatabase(){
-	dsn := "root:admin@tcp(127.0.0.1:3306)/todo?charset=utf8mb4&parseTime=True&loc=Local"
-	var err error
-	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	// Connect to MongoDB
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// AutoMigrate will create the table. Make sure your MySQL server is running.
-	Db.AutoMigrate(&models.Todo{})
+	// Check the connection
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Set up the collection
+	Collection = client.Database("tododb").Collection("todos")
+	
 }
